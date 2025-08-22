@@ -1,0 +1,22 @@
+[project]
+name = "fks-transformer"
+version = "0.1.0"
+description = "FKS Transformer Inference Service"
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "Proprietary" }
+
+dependencies = [
+  "numpy",
+  "pandas",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["fks_transformer*"]
+
+[project.optional-dependencies]
+ml = ["torch", "scikit-learn"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
