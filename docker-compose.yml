@@ -2,7 +2,21 @@ services:
   fks_transformer:
     build:
       context: .
-      dockerfile: Dockerfile.gpu
+      dockerfile: shared/shared_docker/templates/python.gpu.Dockerfile
+    working_dir: /app/src
+    command: ["python", "-m", "main"]
+    environment:
+      TZ: America/Toronto
+      SERVICE_PORT: 4500
+      PYTHONPATH: /app/src
+      CUDA_VISIBLE_DEVICES: all
+    ports:
+      - "4500:4500"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./logs:/app/logs
+      - ./models:/app/models
     deploy:
       resources:
         reservations:

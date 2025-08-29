@@ -2,7 +2,7 @@ name: fks_transformer CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
     paths:
       - 'src/**'
       - 'tests/**'
@@ -109,12 +109,12 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_USERNAME != '' && format('{0}/fks_transformer', env.DOCKER_USERNAME) || 'local/fks_transformer' }}
+          images: ${{ env.DOCKER_USERNAME != '' && format('{0}/fks', env.DOCKER_USERNAME) || 'local/fks' }}
           tags: |
-            type=ref,event=branch,suffix=-${{ matrix.build_type }}
-            type=ref,event=tag,suffix=-${{ matrix.build_type }}
-            type=sha,suffix=-${{ matrix.build_type }}
-            type=raw,value=latest-${{ matrix.build_type }}
+            type=ref,event=branch,prefix=transformer-,suffix=-${{ matrix.build_type }}
+            type=ref,event=tag,prefix=transformer-,suffix=-${{ matrix.build_type }}
+            type=sha,prefix=transformer-,suffix=-${{ matrix.build_type }}
+            type=raw,value=transformer-latest-${{ matrix.build_type }}
 
       - name: Select Dockerfile
         id: dockerfile
@@ -133,6 +133,7 @@ jobs:
           push: ${{ env.DOCKER_USERNAME != '' && env.DOCKER_TOKEN != '' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          load: true  # Load image to local Docker daemon for smoke test
           build-args: |
             SERVICE_RUNTIME=python
             SERVICE_TYPE=transformer
@@ -140,8 +141,9 @@ jobs:
 
       - name: Run container smoke test
         run: |
-          # Get the first tag from the metadata output
+          # Use the locally built image for testing (no pull required)
           IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+          echo "Testing image: $IMAGE_TAG"
           docker run --rm --name fks_transformer_test "$IMAGE_TAG" python -c "import sys; sys.path.append('/app/src'); import main; print('fks_transformer module imported successfully')" || echo 'Basic container test completed'
 
       - name: Export image artifact (no push scenario)
