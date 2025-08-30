@@ -13,16 +13,17 @@ COPY --from=build /app/src/ /app/src/
 
 # Set service-specific environment variables
 ENV SERVICE_NAME=fks-transformer \
-    SERVICE_TYPE=transformer \
-    SERVICE_PORT=8005
+  SERVICE_TYPE=transformer \
+  SERVICE_PORT=8004 \
+  TRANSFORMER_SERVICE_PORT=8004
 
 # Health check endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:${SERVICE_PORT}/health || exit 1
 
-EXPOSE ${SERVICE_PORT}
+EXPOSE 8004
 
 USER appuser
 
-# Use FastAPI/uvicorn as default entrypoint for transformer service
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8005"]
+# Execute module entrypoint directly (handles template or fallback Flask)
+CMD ["python", "src/main.py", "--mode", "service", "--port", "8004"]

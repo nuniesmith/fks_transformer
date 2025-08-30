@@ -347,7 +347,7 @@ def run_service():
     """Run the transformer service"""
     # Set the service name and port from environment variables or defaults
     service_name = os.getenv("TRANSFORMER_SERVICE_NAME", "transformer")
-    port = os.getenv("TRANSFORMER_SERVICE_PORT", "8089")
+    port = os.getenv("TRANSFORMER_SERVICE_PORT", os.getenv("SERVICE_PORT", "8004"))
 
     # Log the service startup
     logger.info(f"Starting {service_name} service on port {port}")
