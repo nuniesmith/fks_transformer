@@ -2,7 +2,7 @@ services:
   fks_transformer:
     build:
       context: .
-      dockerfile: shared/shared_docker/templates/Dockerfile.python
+      dockerfile: shared/docker/templates/Dockerfile.python
     working_dir: /app/src
     command: ["python", "-u", "app.py"]
     environment:
