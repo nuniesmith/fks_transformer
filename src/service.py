@@ -1,6 +1,6 @@
 from framework.base import BaseService
-from services.transformer.processors.market_sentiment import MarketSentimentAnalyzer
-from services.transformer.processors.news import NewsProcessor
+from Zservices.transformer.processors.market_sentiment import MarketSentimentAnalyzer
+from Zservices.transformer.processors.news import NewsProcessor
 
 
 class TransformerService(BaseService):

@@ -20,7 +20,7 @@ def _import_hmm_transformer() -> tuple[Any, Any]:
     # 1) Preferred absolute import
     logger.info(f"[_import_hmm_transformer] sys.path head: {sys.path[:5]}")
     try:
-        from services.transformer.models.hmm_transformer import (  # type: ignore
+        from Zservices.transformer.models.hmm_transformer import (  # type: ignore
             HMMTransformer,
             HMMConfig,
         )
@@ -33,7 +33,7 @@ def _import_hmm_transformer() -> tuple[Any, Any]:
         if p not in sys.path and os.path.isdir(p):
             sys.path.insert(0, p)
     try:
-        from services.transformer.models.hmm_transformer import (  # type: ignore
+        from Zservices.transformer.models.hmm_transformer import (  # type: ignore
             HMMTransformer,
             HMMConfig,
         )
@@ -411,7 +411,7 @@ def run_service():
         # Optional: lightweight inference stub using the HMM-Transformer
         try:
             import numpy as np
-            from services.transformer.models.hmm_transformer import (
+            from Zservices.transformer.models.hmm_transformer import (
                 HMMTransformer,
                 HMMConfig,
             )
