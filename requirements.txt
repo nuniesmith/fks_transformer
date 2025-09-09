@@ -1,6 +1,7 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 transformers==4.56.0
-torch==2.8.0
-torchvision==0.23.0
+torch==2.8.0+cpu
+torchvision==0.23.0+cpu
 datasets==4.0.0
 tokenizers==0.22.0
 sentencepiece==0.2.1

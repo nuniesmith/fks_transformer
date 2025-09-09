@@ -3,11 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fks_transformer"
+name = "transformer-service"
 version = "0.1.0"
-description = "FKS Data Transformation Service"
-requires-python = ">=3.9"
-dependencies = []
+description = "FKS Data Transformation Service (flat src layout)"
+requires-python = ">=3.11"
+dependencies = ["flask", "numpy"]
+
+[project.scripts]
+transformer = "main:main"
 
 [project.optional-dependencies]
 dev = []

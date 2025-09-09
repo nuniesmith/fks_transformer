@@ -1,29 +1,27 @@
-# Multi-stage Dockerfile extending shared Python template (GPU-capable)
+FROM python:3.13-slim AS runtime
 
-# Build stage - extends shared Python template
-FROM shared/python:3.13-slim AS build
-COPY . /app/src/
-RUN python -m pip install --no-deps -e .
+WORKDIR /app
 
-# Runtime stage - extends shared Python template for production  
-FROM shared/python:3.13-slim AS runtime
+COPY requirements.txt requirements.dev.txt* ./
+RUN apt-get update && apt-get install -y --no-install-recommends curl build-essential && rm -rf /var/lib/apt/lists/* && \
+  python -m pip install --upgrade pip wheel setuptools && \
+  PIP_NO_CACHE_DIR=0 pip install -r requirements.txt --no-cache-dir --progress-bar off && \
+  pip cache purge || true
 
-# Copy built application from build stage
-COPY --from=build /app/src/ /app/src/
+COPY . /app/
 
-# Set service-specific environment variables
-ENV SERVICE_NAME=fks-transformer \
-  SERVICE_TYPE=transformer \
-  SERVICE_PORT=8004 \
-  TRANSFORMER_SERVICE_PORT=8004
+ENV PYTHONPATH=/app/src \
+    SERVICE_NAME=transformer \
+    SERVICE_TYPE=transformer \
+    SERVICE_PORT=8004 \
+    TRANSFORMER_SERVICE_PORT=8004
 
-# Health check endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:${SERVICE_PORT}/health || exit 1
 
 EXPOSE 8004
 
+RUN adduser --disabled-password --gecos "" appuser || useradd -m appuser || true
 USER appuser
 
-# Execute module entrypoint directly (handles template or fallback Flask)
 CMD ["python", "src/main.py", "--mode", "service", "--port", "8004"]
