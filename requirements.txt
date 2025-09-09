@@ -1,5 +1,5 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
-transformers==4.56.0
+transformers==4.56.1
 torch==2.8.0+cpu
 torchvision==0.23.0+cpu
 datasets==4.0.0
