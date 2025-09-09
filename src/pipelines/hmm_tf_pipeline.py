@@ -11,7 +11,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from Zservices.transformer.models.hmm_transformer import (
+from services.transformer.models.hmm_transformer import (
     HMMTransformer,
     HMMConfig,
     TransformerConfig,

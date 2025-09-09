@@ -1,5 +1,6 @@
 services:
   fks_transformer:
+    profiles: ["gpu"]
     build:
       context: .
       dockerfile: shared/docker/templates/Dockerfile.python
